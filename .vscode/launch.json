@@ -15,6 +15,17 @@
       "request": "launch",
       "preLaunchTask": "npm: test",
       "url": "http://localhost:9876/debug.html"
+    },
+    {
+      "name": "Docker Node.js Launch",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "platform": "node",
+      "node": {
+        "package": "${workspaceFolder}/.angular/cache/17.1.0/vite/deps/package.json",
+        "localRoot": "${workspaceFolder}/.angular/cache/17.1.0/vite/deps"
+      }
     }
   ]
 }

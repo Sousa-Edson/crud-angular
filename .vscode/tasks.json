@@ -37,6 +37,47 @@
           }
         }
       }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build",
+      "platform": "node",
+      "dockerBuild": {
+        "dockerfile": "${workspaceFolder}/.angular/cache/17.1.0/vite/deps/Dockerfile",
+        "context": "${workspaceFolder}/.angular/cache/17.1.0/vite/deps",
+        "pull": true
+      },
+      "node": {
+        "package": "${workspaceFolder}/.angular/cache/17.1.0/vite/deps/package.json"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: release",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "platform": "node",
+      "node": {
+        "package": "${workspaceFolder}/.angular/cache/17.1.0/vite/deps/package.json"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: debug",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "dockerRun": {
+        "env": {
+          "DEBUG": "*",
+          "NODE_ENV": "development"
+        }
+      },
+      "node": {
+        "package": "${workspaceFolder}/.angular/cache/17.1.0/vite/deps/package.json",
+        "enableDebugging": true
+      }
     }
   ]
 }

@@ -19,7 +19,7 @@ import { CategoryPipe } from "../../shared/pipes/category.pipe";
 export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]>;
 
-  displayedColumns = ['name', 'category'];
+  displayedColumns = ['name', 'category','actions'];
 
   // coursesService: CoursesService;
 
