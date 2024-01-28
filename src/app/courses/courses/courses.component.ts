@@ -9,18 +9,18 @@ import { Course } from '../model/course';
 import { CoursesService } from './../service/courses.service';
 import { CategoryPipe } from '../../shared/pipes/category.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesListComponent } from "../courses-list/courses-list.component";
 
 @Component({
-  selector: 'app-courses',
-  standalone: true,
-  templateUrl: './courses.component.html',
-  styleUrl: './courses.component.scss',
-  imports: [AppMaterialModule, CommonModule, CategoryPipe],
+    selector: 'app-courses',
+    standalone: true,
+    templateUrl: './courses.component.html',
+    styleUrl: './courses.component.scss',
+    imports: [AppMaterialModule, CommonModule, CategoryPipe, CoursesListComponent]
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]>;
 
-  displayedColumns = ['name', 'category', 'actions'];
 
   // coursesService: CoursesService;
 
