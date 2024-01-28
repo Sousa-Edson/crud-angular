@@ -9,18 +9,22 @@ import { Course } from '../../model/course';
 import { CoursesService } from '../../service/courses.service';
 import { CategoryPipe } from '../../../shared/pipes/category.pipe';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoursesListComponent } from "../../components/courses-list/courses-list.component";
+import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
 
 @Component({
-    selector: 'app-courses',
-    standalone: true,
-    templateUrl: './courses.component.html',
-    styleUrl: './courses.component.scss',
-    imports: [AppMaterialModule, CommonModule, CategoryPipe, CoursesListComponent]
+  selector: 'app-courses',
+  standalone: true,
+  templateUrl: './courses.component.html',
+  styleUrl: './courses.component.scss',
+  imports: [
+    AppMaterialModule,
+    CommonModule,
+    CategoryPipe,
+    CoursesListComponent,
+  ],
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]>;
-
 
   // coursesService: CoursesService;
 
@@ -49,5 +53,8 @@ export class CoursesComponent implements OnInit {
 
   onAdd() {
     this.router.navigate(['new'], { relativeTo: this.route });
+  }
+  onEdit(course: Course) {
+    this.router.navigate(['edit',course._id], { relativeTo: this.route });
   }
 }
