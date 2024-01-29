@@ -5,6 +5,7 @@
       <mat-form-field class="full-width">
         <mat-label>Nome</mat-label>
         <input matInput placeholder="Nome" formControlName="name" #name   />
+        <mat-hint align="end"> {{name.value?.length || 0}} /100</mat-hint>
         @if (form.get('name')?.invalid) {
           <mat-error>{{getErrorMessage("name")}}</mat-error>
         }
