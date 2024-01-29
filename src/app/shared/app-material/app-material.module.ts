@@ -26,7 +26,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatInputModule,
     MatCardModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
 })
 export class AppMaterialModule {}

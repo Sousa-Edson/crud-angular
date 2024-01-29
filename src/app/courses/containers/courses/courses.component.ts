@@ -81,7 +81,7 @@ export class CoursesComponent implements OnInit {
             this.snackBar.open('Curso removido com sucesso!', 'X', {
               duration: 5000,
               verticalPosition: 'top',
-              horizontalPosition: 'center'
+              horizontalPosition: 'center',
             });
           },
           () => this.onError('Erro ao tentar remover curso.')

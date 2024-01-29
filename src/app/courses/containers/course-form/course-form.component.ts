@@ -1,7 +1,11 @@
 import { Course } from './../../model/course';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { 
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -19,8 +23,11 @@ import { CoursesService } from '../../service/courses.service';
 export class CourseFormComponent implements OnInit {
   form = this.formBuilder.group({
     _id: [''],
-    name: [''],
-    category: [''],
+    name: [
+      '',
+      [Validators.required, Validators.min(5), Validators.maxLength(100)],
+    ],
+    category: ['', [Validators.required]],
   });
 
   constructor(
@@ -28,16 +35,17 @@ export class CourseFormComponent implements OnInit {
     private service: CoursesService,
     private snackBar: MatSnackBar,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+
   ) {}
   ngOnInit(): void {
-    const course : Course = this.route.snapshot.data['course'];
+    const course: Course = this.route.snapshot.data['course'];
     console.log(course);
     this.form.setValue({
-      _id:course._id,
-      name:course.name,
-      category:course.category
-    })
+      _id: course._id,
+      name: course.name,
+      category: course.category,
+    });
   }
 
   onSubmit() {
@@ -62,5 +70,12 @@ export class CourseFormComponent implements OnInit {
     this.snackBar.open('Erro ao salvar o curso', ' ', {
       duration: 3000,
     });
+  }
+  getErrorMessage(fieldName: string) {
+    const field = this.form.get(fieldName);
+    if (field?.hasError('required')) {
+      return 'Campo Obigatório';
+    }
+    return 'Erro';
   }
 }
