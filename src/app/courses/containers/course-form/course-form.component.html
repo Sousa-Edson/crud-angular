@@ -5,7 +5,7 @@
       <mat-form-field class="full-width">
         <mat-label>Nome</mat-label>
         <input matInput placeholder="Nome" formControlName="name" #name   />
-        <mat-hint align="end"> {{name.value?.length || 0}} /100</mat-hint>
+        <mat-hint align="end"> {{name.value.length || 0}} /100</mat-hint>
         @if (form.get('name')?.invalid) {
           <mat-error>{{getErrorMessage("name")}}</mat-error>
         }
@@ -15,8 +15,8 @@
         <mat-label>Categoria</mat-label>
         <mat-select formControlName="category">
           <mat-option value="null"></mat-option>
-          <mat-option value="front-end">front-end</mat-option>
-          <mat-option value="back-end">back-end</mat-option>
+          <mat-option value="Front-end">Front-end</mat-option>
+          <mat-option value="Back-end">Back-end</mat-option>
         </mat-select>
         @if (form.get('category')?.invalid) {
           <mat-error>{{ getErrorMessage("category") }}</mat-error>
