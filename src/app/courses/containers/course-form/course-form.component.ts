@@ -1,7 +1,7 @@
 import { Course } from './../../model/course';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { 
+import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
@@ -88,3 +88,4 @@ export class CourseFormComponent implements OnInit {
     return 'Campo inválido';
   }
 }
+
