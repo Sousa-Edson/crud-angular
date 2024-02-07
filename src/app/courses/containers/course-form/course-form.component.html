@@ -4,10 +4,10 @@
     <form [formGroup]="form" class="min-width">
       <mat-form-field class="full-width">
         <mat-label>Nome</mat-label>
-        <input matInput placeholder="Nome" formControlName="name" #name   />
-        <mat-hint align="end"> {{name.value.length || 0}} /100</mat-hint>
+        <input matInput placeholder="Nome" formControlName="name" #name />
+        <mat-hint align="end"> {{ name.value.length || 0 }} /100</mat-hint>
         @if (form.get('name')?.invalid) {
-          <mat-error>{{getErrorMessage("name")}}</mat-error>
+        <mat-error>{{ getErrorMessage("name") }}</mat-error>
         }
       </mat-form-field>
 
@@ -19,9 +19,36 @@
           <mat-option value="Back-end">Back-end</mat-option>
         </mat-select>
         @if (form.get('category')?.invalid) {
-          <mat-error>{{ getErrorMessage("category") }}</mat-error>
-          }
+        <mat-error>{{ getErrorMessage("category") }}</mat-error>
+        }
       </mat-form-field>
+
+      <mat-toolbar>
+        <span>Aulas</span>
+        <button mat-icon-button color="accent">
+          <mat-icon aria-label="Adicionar uma nova aula">add</mat-icon>
+        </button>
+      </mat-toolbar>
+
+      <table style="width: 100%"
+      formArrayName="lessons"
+      *ngFor="let lesson of getLessonsFormArray()" >
+        <tr>
+          <td style="width: 65%">
+            <mat-form-field class="full-width">
+              <mat-label>Nome da aula</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </td>
+          <td style="width: 30%">
+            <mat-form-field class="full-width">
+              <mat-label>URL</mat-label>
+              <span matPrefix>https://youtu.be/</span>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
     </form>
   </mat-card-content>
 
@@ -29,7 +56,8 @@
     <button mat-raised-button color="primary" (click)="onSubmit()">
       Salvar
     </button>
-    <button mat-raised-button (click)="onCancel()" class="btn-space">Cancelar</button>
+    <button mat-raised-button (click)="onCancel()" class="btn-space">
+      Cancelar
+    </button>
   </mat-card-actions>
 </mat-card>
-

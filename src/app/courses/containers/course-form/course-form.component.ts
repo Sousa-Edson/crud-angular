@@ -5,6 +5,7 @@ import {
   FormGroup,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  UntypedFormArray,
   Validators,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -71,6 +72,11 @@ export class CourseFormComponent implements OnInit {
       youtubeUrl: [lesson.youtubeUrl], // [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
     });
   }
+
+  getLessonsFormArray() {
+    return (<UntypedFormArray>this.form.get('lessons')).controls;
+  }
+
   onSubmit() {
     this.service.save(this.form.value).subscribe(
       (result) => this.onSuccess(),
