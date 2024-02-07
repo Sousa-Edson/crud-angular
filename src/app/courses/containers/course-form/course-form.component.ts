@@ -2,6 +2,7 @@ import { Course } from './../../model/course';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
+  FormGroup,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
@@ -12,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { CoursesService } from '../../service/courses.service';
+import { Lesson } from '../../model/lesson';
 
 @Component({
   selector: 'app-course-form',
@@ -21,33 +23,54 @@ import { CoursesService } from '../../service/courses.service';
   styleUrl: './course-form.component.scss',
 })
 export class CourseFormComponent implements OnInit {
-  form = this.formBuilder.group({
-    _id: [''],
-    name: [
-      '',
-      [Validators.required, Validators.minLength(5), Validators.maxLength(100)],
-    ],
-    category: ['', [Validators.required]],
-  });
+  form!: FormGroup;
 
   constructor(
     private formBuilder: NonNullableFormBuilder,
     private service: CoursesService,
     private snackBar: MatSnackBar,
     private location: Location,
-    private route: ActivatedRoute,
-
+    private route: ActivatedRoute
   ) {}
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course'];
-    console.log(course);
-    this.form.setValue({
-      _id: course._id,
-      name: course.name,
-      category: course.category,
+    this.form = this.formBuilder.group({
+      _id: [course._id],
+      name: [
+        course.name,
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+        ],
+      ],
+      category: [course.category, [Validators.required]],
+      lessons: this.formBuilder.array([this.retrieveLesson(course)]),
     });
+    console.log(this.form);
+    console.log(this.form.value);
   }
 
+  private retrieveLesson(course: Course) {
+    const lessons = [];
+
+    if (course?.lessons) {
+      course.lessons.forEach((lesson) =>
+        lessons.push(this.createLesson(lesson))
+      );
+    } else {
+      lessons.push(this.createLesson());
+    }
+    return lessons;
+  }
+
+  private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }) {
+    return this.formBuilder.group({
+      id: [lesson.id],
+      name: [lesson.name], //, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
+      youtubeUrl: [lesson.youtubeUrl], // [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
+    });
+  }
   onSubmit() {
     this.service.save(this.form.value).subscribe(
       (result) => this.onSuccess(),
@@ -77,15 +100,18 @@ export class CourseFormComponent implements OnInit {
       return 'Campo Obrigatório';
     }
     if (field?.hasError('minlength')) {
-      const requiredLength:number = field.errors ? field.errors['minlength']['requiredLength']:5
+      const requiredLength: number = field.errors
+        ? field.errors['minlength']['requiredLength']
+        : 5;
       return `Tamanho minimo precisa ser de ${requiredLength} caracteres.`;
     }
     if (field?.hasError('maxlength')) {
-      const requiredLength:number = field.errors ? field.errors['maxlength']['requiredLength']:100
+      const requiredLength: number = field.errors
+        ? field.errors['maxlength']['requiredLength']
+        : 100;
       return `Tamanho máximo excedido de ${requiredLength} caracteres.`;
     }
 
     return 'Campo inválido';
   }
 }
-
