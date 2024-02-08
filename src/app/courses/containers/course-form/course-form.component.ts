@@ -1,5 +1,5 @@
 import { Course } from './../../model/course';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
@@ -19,7 +19,7 @@ import { Lesson } from '../../model/lesson';
 @Component({
   selector: 'app-course-form',
   standalone: true,
-  imports: [AppMaterialModule, MatFormFieldModule, ReactiveFormsModule],
+  imports: [AppMaterialModule, MatFormFieldModule, ReactiveFormsModule,CommonModule],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.scss',
 })
@@ -37,22 +37,15 @@ export class CourseFormComponent implements OnInit {
     const course: Course = this.route.snapshot.data['course'];
     this.form = this.formBuilder.group({
       _id: [course._id],
-      name: [
-        course.name,
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(100),
-        ],
-      ],
+      name: [course.name, [Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(100)]],
       category: [course.category, [Validators.required]],
-      lessons: this.formBuilder.array([this.retrieveLesson(course)]),
+      lessons: this.formBuilder.array(this.retrieveLessons(course), Validators.required)
     });
-    console.log(this.form);
-    console.log(this.form.value);
   }
 
-  private retrieveLesson(course: Course) {
+  private retrieveLessons(course: Course) {
     const lessons = [];
 
     if (course?.lessons) {
