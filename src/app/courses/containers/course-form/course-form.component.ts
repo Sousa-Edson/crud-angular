@@ -19,7 +19,12 @@ import { Lesson } from '../../model/lesson';
 @Component({
   selector: 'app-course-form',
   standalone: true,
-  imports: [AppMaterialModule, MatFormFieldModule, ReactiveFormsModule,CommonModule],
+  imports: [
+    AppMaterialModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    CommonModule,
+  ],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.scss',
 })
@@ -37,11 +42,19 @@ export class CourseFormComponent implements OnInit {
     const course: Course = this.route.snapshot.data['course'];
     this.form = this.formBuilder.group({
       _id: [course._id],
-      name: [course.name, [Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(100)]],
+      name: [
+        course.name,
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+        ],
+      ],
       category: [course.category, [Validators.required]],
-      lessons: this.formBuilder.array(this.retrieveLessons(course), Validators.required)
+      lessons: this.formBuilder.array(
+        this.retrieveLessons(course),
+        Validators.required
+      ),
     });
   }
 
@@ -68,6 +81,17 @@ export class CourseFormComponent implements OnInit {
 
   getLessonsFormArray() {
     return (<UntypedFormArray>this.form.get('lessons')).controls;
+  }
+
+  addNewLesson() {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.push(this.createLesson());
+  }
+
+
+  removeLesson(index:number){
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.removeAt(index);
   }
 
   onSubmit() {
