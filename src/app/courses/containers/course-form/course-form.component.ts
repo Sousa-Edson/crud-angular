@@ -36,7 +36,8 @@ export class CourseFormComponent implements OnInit {
     private service: CoursesService,
     private snackBar: MatSnackBar,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+
   ) {}
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course'];
@@ -56,7 +57,6 @@ export class CourseFormComponent implements OnInit {
         Validators.required
       ),
     });
-
   }
 
   private retrieveLessons(course: Course) {
@@ -69,7 +69,6 @@ export class CourseFormComponent implements OnInit {
     } else {
       lessons.push(this.createLesson());
     }
-    console.log(lessons.length)
     return lessons;
   }
 
@@ -85,11 +84,13 @@ export class CourseFormComponent implements OnInit {
         ],
       ],
       youtubeUrl: [
-        lesson.youtubeUrl,[
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(100),
-      ]],
+        lesson.youtubeUrl,
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(100),
+        ],
+      ],
     });
   }
 
@@ -157,6 +158,6 @@ export class CourseFormComponent implements OnInit {
 
   isFormArrayRequired(): boolean {
     const lessons = this.form.get('lessons') as UntypedFormArray;
-    return !lessons.valid && lessons.hasError('required'); //&&lessons.touched;
+    return !lessons.valid && lessons.hasError('required')&&lessons.touched;
   }
 }
