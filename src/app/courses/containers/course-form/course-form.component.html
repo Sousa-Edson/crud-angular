@@ -7,7 +7,7 @@
         <input matInput placeholder="Nome" formControlName="name" #name />
         <mat-hint align="end"> {{ name.value.length || 0 }} /100</mat-hint>
         @if (form.get('name')?.invalid) {
-        <mat-error>{{ getErrorMessage("name") }}</mat-error>
+        <mat-error>{{ formUtils.getErrorMessage(form, "name") }}</mat-error>
         }
       </mat-form-field>
 
@@ -19,7 +19,7 @@
           <mat-option value="Back-end">Back-end</mat-option>
         </mat-select>
         @if (form.get('category')?.invalid) {
-        <mat-error>{{ getErrorMessage("category") }}</mat-error>
+        <mat-error>{{ formUtils.getErrorMessage(form, "category") }}</mat-error>
         }
         <!-- <mat-error *ngIf="form.get('category')?.invalid">{{ getErrorMessage("category") }}</mat-error> -->
       </mat-form-field>
@@ -31,7 +31,9 @@
         </button>
       </mat-toolbar>
 
-      <mat-error *ngIf="isFormArrayRequired()">Adicione uma aula</mat-error>
+      <mat-error *ngIf="formUtils.isFormArrayRequired(form, 'lessons')"
+        >Adicione uma aula</mat-error
+      >
       @for (lesson of getLessonsFormArray(); track lesson; let i = $index) {
       <table style="width: 100%" formArrayName="lessons">
         <tr [formGroupName]="i">
@@ -40,9 +42,14 @@
               <mat-label>Nome da aula</mat-label>
               <input matInput formControlName="name" />
             </mat-form-field>
-            <mat-error *ngIf="getLessonsFormArray()[i].get('name')?.invalid"
-              >Campo inválido</mat-error
-            >
+            <mat-error *ngIf="getLessonsFormArray()[i].get('name')?.invalid">{{
+              formUtils.getFormArrayFieldErrorMessage(
+                form,
+                "lessons",
+                "name",
+                i
+              )
+            }}</mat-error>
           </td>
           <td style="width: 30%">
             <mat-form-field class="full-width">
@@ -52,7 +59,14 @@
             </mat-form-field>
             <mat-error
               *ngIf="getLessonsFormArray()[i].get('youtubeUrl')?.invalid"
-              >Campo inválido</mat-error
+              >{{
+                formUtils.getFormArrayFieldErrorMessage(
+                  form,
+                  "lessons",
+                  "youtubeUrl",
+                  i
+                )
+              }}</mat-error
             >
           </td>
           <td>
