@@ -56,6 +56,7 @@ export class CourseFormComponent implements OnInit {
         Validators.required
       ),
     });
+
   }
 
   private retrieveLessons(course: Course) {
@@ -68,14 +69,27 @@ export class CourseFormComponent implements OnInit {
     } else {
       lessons.push(this.createLesson());
     }
+    console.log(lessons.length)
     return lessons;
   }
 
   private createLesson(lesson: Lesson = { id: '', name: '', youtubeUrl: '' }) {
     return this.formBuilder.group({
       id: [lesson.id],
-      name: [lesson.name], //, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
-      youtubeUrl: [lesson.youtubeUrl], // [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
+      name: [
+        lesson.name,
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+        ],
+      ],
+      youtubeUrl: [
+        lesson.youtubeUrl,[
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(100),
+      ]],
     });
   }
 
@@ -88,17 +102,20 @@ export class CourseFormComponent implements OnInit {
     lessons.push(this.createLesson());
   }
 
-
-  removeLesson(index:number){
+  removeLesson(index: number) {
     const lessons = this.form.get('lessons') as UntypedFormArray;
     lessons.removeAt(index);
   }
 
   onSubmit() {
-    this.service.save(this.form.value).subscribe(
-      (result) => this.onSuccess(),
-      (error) => this.onError()
-    );
+    if (this.form.valid) {
+      this.service.save(this.form.value).subscribe(
+        (result) => this.onSuccess(),
+        (error) => this.onError()
+      );
+    } else {
+      alert('form invalido');
+    }
   }
 
   onCancel() {
@@ -136,5 +153,10 @@ export class CourseFormComponent implements OnInit {
     }
 
     return 'Campo inválido';
+  }
+
+  isFormArrayRequired(): boolean {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    return !lessons.valid && lessons.hasError('required'); //&&lessons.touched;
   }
 }
