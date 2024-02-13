@@ -1,7 +1,7 @@
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar} from '@angular/material/snack-bar'
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+ import { MatDialog } from '@angular/material/dialog';
 import { catchError, Observable, of, tap } from 'rxjs';
 
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
