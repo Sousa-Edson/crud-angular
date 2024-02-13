@@ -1,21 +1,24 @@
-import { MatSnackBar} from '@angular/material/snack-bar'
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
- import { MatDialog } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of, tap } from 'rxjs';
 
-
-import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
-import { Course } from '../../model/course';
-import { CoursesService } from '../../service/courses.service';
-import { CategoryPipe } from '../../../shared/pipes/category.pipe';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
-
-import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
+import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
+import { Course } from '../../model/course';
 import { CoursePage } from '../../model/course-page';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { CoursesService } from '../../service/courses.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-courses',
@@ -23,11 +26,13 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss',
   imports: [
-    CommonModule,
-    CategoryPipe,
+    MatCardModule,
+    MatToolbarModule,
     CoursesListComponent,
-    MatDialogModule,
-],
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    AsyncPipe
+  ],
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<CoursePage> | null = null;
@@ -35,8 +40,8 @@ export class CoursesComponent implements OnInit {
   // coursesService: CoursesService;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  pageIndex=0;
-  pageSize=10;
+  pageIndex = 0;
+  pageSize = 10;
 
   constructor(
     private coursesService: CoursesService,
@@ -56,17 +61,19 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  refresh( pageEvent:PageEvent ={length:0,pageIndex:0,pageSize:10}) {
-    this.courses$ = this.coursesService.list(pageEvent.pageIndex, pageEvent.pageSize)
-    .pipe(tap(()=>{
-      this.pageIndex = pageEvent.pageIndex;
-      this.pageSize = pageEvent.pageSize;
-    }),
-      catchError((error) => {
-        this.onError('Erro ao carregar');
-        return of({ courses: [], totalElements: 0, totalPages: 0 });
-      })
-    );
+  refresh(pageEvent: PageEvent = { length: 0, pageIndex: 0, pageSize: 10 }) {
+    this.courses$ = this.coursesService
+      .list(pageEvent.pageIndex, pageEvent.pageSize)
+      .pipe(
+        tap(() => {
+          this.pageIndex = pageEvent.pageIndex;
+          this.pageSize = pageEvent.pageSize;
+        }),
+        catchError((error) => {
+          this.onError('Erro ao carregar');
+          return of({ courses: [], totalElements: 0, totalPages: 0 });
+        })
+      );
   }
 
   onAdd() {

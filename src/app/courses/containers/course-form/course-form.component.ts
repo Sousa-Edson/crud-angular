@@ -1,3 +1,5 @@
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { Course } from './../../model/course';
 import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -8,23 +10,36 @@ import {
   UntypedFormArray,
   Validators,
 } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatFormFieldControl,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-
 
 import { CoursesService } from '../../service/courses.service';
 import { Lesson } from '../../model/lesson';
 import { FormUtilsService } from '../../../shared/form/form-utils.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
+import { MatOptionModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-course-form',
   standalone: true,
   imports: [
-    MatFormFieldModule,
+    MatCardModule,
+    MatToolbarModule,
     ReactiveFormsModule,
-    CommonModule,
-],
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.scss',
 })
@@ -38,7 +53,6 @@ export class CourseFormComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     public formUtils: FormUtilsService
-
   ) {}
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course'];
@@ -116,7 +130,7 @@ export class CourseFormComponent implements OnInit {
         (error) => this.onError()
       );
     } else {
-     this.formUtils.validateAllFormFields(this.form);
+      this.formUtils.validateAllFormFields(this.form);
     }
   }
 
@@ -136,7 +150,4 @@ export class CourseFormComponent implements OnInit {
       duration: 3000,
     });
   }
-
-
-
 }
