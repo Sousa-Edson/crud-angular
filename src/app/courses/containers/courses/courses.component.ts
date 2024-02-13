@@ -1,8 +1,8 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
@@ -14,6 +14,8 @@ import { CoursesListComponent } from '../../components/courses-list/courses-list
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { CoursePage } from '../../model/course-page';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-courses',
@@ -29,9 +31,13 @@ import { ConfirmationDialogComponent } from '../../../shared/components/confirma
   ],
 })
 export class CoursesComponent implements OnInit {
-  courses$: Observable<Course[]> | null = null;
+  courses$: Observable<CoursePage> | null = null;
 
   // coursesService: CoursesService;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  pageIndex=0;
+  pageSize=10;
 
   constructor(
     private coursesService: CoursesService,
@@ -51,11 +57,15 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  refresh() {
-    this.courses$ = this.coursesService.list().pipe(
+  refresh( pageEvent:PageEvent ={length:0,pageIndex:0,pageSize:10}) {
+    this.courses$ = this.coursesService.list(pageEvent.pageIndex, pageEvent.pageSize)
+    .pipe(tap(()=>{
+      this.pageIndex = pageEvent.pageIndex;
+      this.pageSize = pageEvent.pageSize;
+    }),
       catchError((error) => {
         this.onError('Erro ao carregar');
-        return of([]);
+        return of({ courses: [], totalElements: 0, totalPages: 0 });
       })
     );
   }
