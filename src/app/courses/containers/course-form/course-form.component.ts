@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
-import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
+
 import { CoursesService } from '../../service/courses.service';
 import { Lesson } from '../../model/lesson';
 import { FormUtilsService } from '../../../shared/form/form-utils.service';
@@ -21,11 +21,10 @@ import { FormUtilsService } from '../../../shared/form/form-utils.service';
   selector: 'app-course-form',
   standalone: true,
   imports: [
-    AppMaterialModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     CommonModule,
-  ],
+],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.scss',
 })

@@ -4,7 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
  import { MatDialog } from '@angular/material/dialog';
 import { catchError, Observable, of, tap } from 'rxjs';
 
-import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
+
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { Course } from '../../model/course';
 import { CoursesService } from '../../service/courses.service';
@@ -23,12 +23,11 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss',
   imports: [
-    AppMaterialModule,
     CommonModule,
     CategoryPipe,
     CoursesListComponent,
     MatDialogModule,
-  ],
+],
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<CoursePage> | null = null;

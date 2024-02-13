@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Course } from '../../model/course';
-import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
+
 import { CategoryPipe } from '../../../shared/pipes/category.pipe';
 
 @Component({
@@ -9,7 +9,7 @@ import { CategoryPipe } from '../../../shared/pipes/category.pipe';
   standalone: true,
   templateUrl: './courses-list.component.html',
   styleUrl: './courses-list.component.scss',
-  imports: [AppMaterialModule, CategoryPipe],
+  imports: [CategoryPipe],
 })
 export class CoursesListComponent {
   @Input() courses: Course[] = [];
