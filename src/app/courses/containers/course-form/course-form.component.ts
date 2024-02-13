@@ -1,7 +1,7 @@
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { Course } from './../../model/course';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
